@@ -1,11 +1,11 @@
 /* ===========================================================
-   💌 Carta Animada — Tema Rosado / Negro / Dorado
+   💌 Carta Animada — Tema Rosado / Negro / Dorado (vFinal+goldFlash)
    =========================================================== */
 
-/* Reset general */
+/* Reset */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Paleta y variables */
+/* Variables */
 :root{
   --pink: #F7C7D9;
   --pink-soft: #FBE9F1;
@@ -15,10 +15,10 @@
   --muted: rgba(0,0,0,.55);
   --ring: rgba(0,0,0,.08);
 
-  /* patrón de puntitos */
-  --dot-size: 28px;     /* distancia entre puntos */
-  --dot-radius: 1.7px;  /* radio del punto */
-  --dot-opacity: .38;   /* opacidad global del patrón */
+  /* patrón */
+  --dot-size: 28px;      /* distancia entre puntos */
+  --dot-radius: 1.7px;   /* radio del punto */
+  --dot-opacity: .38;    /* opacidad global del patrón */
 }
 
 /* Tipografía base */
@@ -31,8 +31,6 @@ html, body{
 /* ===========================================================
    🎀 Fondo rosado con puntitos dorados
    =========================================================== */
-
-/* Patrón fijo en <html> para que se vea en todos los bloques */
 html{
   background:
     radial-gradient(circle, rgba(212,175,55,1) 0 var(--dot-radius), transparent calc(var(--dot-radius) + .1px)) 0 0 / var(--dot-size) var(--dot-size),
@@ -40,33 +38,18 @@ html{
     var(--pink-soft);
   background-attachment: fixed, fixed, fixed;
 }
-html::before{
-  content:"";
-  position: fixed; inset: 0; pointer-events: none; z-index: -1;
-  background:
-    radial-gradient(circle, rgba(212,175,55,1) 0 var(--dot-radius), transparent calc(var(--dot-radius) + .1px)) 0 0 / var(--dot-size) var(--dot-size),
-    radial-gradient(circle, rgba(212,175,55,1) 0 var(--dot-radius), transparent calc(var(--dot-radius) + .1px)) calc(var(--dot-size)/2) calc(var(--dot-size)/2) / var(--dot-size) var(--dot-size);
-  opacity: var(--dot-opacity);
-}
 
-/* Viñeta leve para darle profundidad */
 html::after{
-  content:"";
-  position: fixed; inset: 0; pointer-events: none; z-index: -1;
+  content:""; position: fixed; inset: 0; pointer-events: none; z-index: -1;
   background:
     radial-gradient(120% 60% at 50% -10%, rgba(255,255,255,.10), transparent 60%),
     radial-gradient(120% 60% at 50% 110%, rgba(255,255,255,.08), transparent 60%);
 }
 
-/* Fondo transparente en todo lo demás */
-body,
-.wrap,
-main,
-header.site,
-section.block { background: transparent !important; }
+body, .wrap, main, header.site, section.block { background: transparent !important; }
 
 /* ===========================================================
-   ✉️ Animación de la carta
+   ✉️ Overlay de la carta con flaps triangulares
    =========================================================== */
 .letter-cover{
   position: fixed; inset: 0; z-index: 60;
@@ -75,59 +58,80 @@ section.block { background: transparent !important; }
   background: transparent;
 }
 
-/* Flaps triangulares */
+/* Cada flap ocupa media pantalla visible */
 .letter-cover .panel{
-  position: absolute; left: 0; width: 100%; height: 50vh;
-  will-change: clip-path, filter;
+  position: absolute; left: 0; width: 100%;
+  height: 50svh;          /* altura estable móvil */
+  min-height: 50svh;
+  will-change: clip-path, transform, filter;
   background:
     repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 6px, transparent 6px 12px),
-    linear-gradient(#ffdfee, var(--pink));
-  filter:
-    drop-shadow(0 0 0.6px rgba(0,0,0,.8))
-    drop-shadow(0 6px 18px rgba(0,0,0,.08));
+    linear-gradient(#ffdfee, var(--pink));     /* cambia a (#3a3a3a, #1b1b1b) para flaps negros */
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,.08));
 }
+
+/* Fallback para navegadores sin svh */
+@supports not (height: 1svh){
+  .letter-cover .panel{
+    height: 50dvh;
+    min-height: 50dvh;
+  }
+}
+
+/* Flap superior: recto, animable */
 .letter-cover .panel.top{
   top: 0;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform: translateY(-0.5px);
+  background:
+    repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 6px, transparent 6px 12px),
+    linear-gradient(#ffdfee, var(--pink));
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,.08));
+  box-shadow: none;
+  border: 0; border-radius: 0;
+  transition: filter .25s ease, box-shadow .25s ease;
 }
+
+/* Flap inferior */
 .letter-cover .panel.bottom{
   bottom: 0;
   clip-path: polygon(0 100%, 100% 100%, 50% 0);
+  transform: translateY(0.5px);
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,.08));
 }
 
-/* Círculo y línea central */
-.center-mark{
-  position: fixed; left: 0; right: 0; top: 50%;
-  transform: translateY(-50%);
-  display: grid; place-items: center;
-  pointer-events: none;
-  transition: opacity .35s ease, transform .35s ease;
-}
-.center-mark .seam{
-  width: min(92vw, 900px); height: 2px;
-  background: linear-gradient(to right, transparent, rgba(0,0,0,.28), transparent);
-  opacity: .35;
-}
-.center-mark::before{
-  content:"";
-  position: absolute; width: 64px; height: 64px; border-radius: 50%;
-  border: 2px dashed rgba(0,0,0,.55);
-  background:
-    radial-gradient(circle at 32% 32%, rgba(0,0,0,.08), transparent 60%),
-    linear-gradient(#fff6fa, #f7ddeb);
-  box-shadow: 0 6px 16px rgba(0,0,0,.1), inset 0 0 0 3px var(--gold-light);
-  transform: translateY(-60px);
-}
-.center-mark .hint{
-  margin-top: 10px;
-  font-size: 14px; color: var(--muted);
-  background: rgba(255,255,255,.85);
-  padding: 4px 10px; border-radius: 999px;
-  border: 1px solid rgba(0,0,0,.08);
-  backdrop-filter: blur(3px);
+/* —— Quitar círculo y texto central —— */
+.center-mark{ display: none !important; }
+
+/* ===========================================================
+   🔆 Destello dorado durante la apertura del flap superior
+   =========================================================== */
+@keyframes goldFlash {
+  0% {
+    box-shadow:
+      0 -2px 0 var(--gold),
+      0 6px 18px rgba(0,0,0,.08);
+    filter:
+      drop-shadow(0 -1px 0 var(--gold))
+      drop-shadow(0 6px 18px rgba(0,0,0,.08));
+  }
+  70% {
+    box-shadow:
+      0 -1px 0 rgba(212,175,55,.7),
+      0 6px 18px rgba(0,0,0,.08);
+    filter:
+      drop-shadow(0 -1px 0 rgba(212,175,55,.7))
+      drop-shadow(0 6px 18px rgba(0,0,0,.08));
+  }
+  100% {
+    box-shadow: none;
+    filter: drop-shadow(0 6px 18px rgba(0,0,0,.08));
+  }
 }
 
-/* Animación tipo "abrir" */
+/* ===========================================================
+   🎬 Animaciones de apertura (y destello)
+   =========================================================== */
 @keyframes flapTop {
   0%   { clip-path: polygon(0 0, 100% 0, 50% 100%); }
   18%  { clip-path: polygon(5% 0, 95% 0, 50% 92%); }
@@ -138,12 +142,29 @@ section.block { background: transparent !important; }
   18%  { clip-path: polygon(5% 100%, 95% 100%, 50% 8%); }
   100% { clip-path: polygon(-5% 240%, 105% 240%, 50% 100%); }
 }
-.letter-cover.open .panel.top{ animation: flapTop 760ms cubic-bezier(.2,.8,.2,1) forwards; }
-.letter-cover.open .panel.bottom{ animation: flapBottom 760ms cubic-bezier(.2,.8,.2,1) forwards; }
-.letter-cover.open .center-mark{ opacity: 0; transform: translateY(-50%) scale(.98); }
+
+/* Lanza DOS animaciones en el flap superior: abrir + flash dorado */
+.letter-cover.open .panel.top{
+  animation:
+    flapTop 760ms cubic-bezier(.2,.8,.2,1) forwards,
+    goldFlash 280ms ease-out;
+}
+
+/* Flap inferior solo abre */
+.letter-cover.open .panel.bottom{
+  animation: flapBottom 760ms cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+/* (opcional) dorado mientras se mantiene presionado */
+.letter-cover:active .panel.top{
+  filter:
+    drop-shadow(0 -1px 0 var(--gold))
+    drop-shadow(0 6px 18px rgba(0,0,0,.08));
+  box-shadow: 0 -2px 0 var(--gold);
+}
 
 /* ===========================================================
-   🌸 Contenido — Texto flotante y limpio
+   🌸 Contenido flotante
    =========================================================== */
 .wrap{
   opacity: 0; transform: translateY(8px);
@@ -166,11 +187,12 @@ header.site{
 
 main{ scroll-snap-type: y mandatory; }
 section.block{
-  min-height: 80svh;
+  min-height: 100svh;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   scroll-snap-align: start; padding: 0 24px; text-align: center;
 }
 
+/* Texto flotante */
 .card{
   background: transparent; border: none; box-shadow: none;
   color: var(--black); max-width: 700px; margin: 0 auto;
@@ -194,7 +216,7 @@ p{
   line-height: 1.6; color: rgba(0,0,0,.85);
 }
 
-/* Imagen opcional (por ejemplo, después del agradecimiento) */
+/* Imagen opcional */
 .floating-image{
   display: block; width: min(80%, 420px); margin: 40px auto 0;
   border-radius: 10px; object-fit: cover;
@@ -203,8 +225,6 @@ p{
   transition: opacity 1s ease, transform 1s ease;
 }
 .wrap.ready .floating-image{ opacity: 1; transform: none; }
-
-
 
 /* Footer */
 .footer{ padding: 36px 18px; text-align: center; color: rgba(0,0,0,.5); }
@@ -215,10 +235,9 @@ p{
 }
 .top:hover{ background: var(--gold); color: #fff; }
 
-/* Accesibilidad */
+/* Accesibilidad / movimiento reducido */
 .no-scroll{ overflow: hidden; }
 :focus-visible{ outline: 2px dashed var(--gold); outline-offset: 3px; }
-
 @media (prefers-reduced-motion: reduce){
   .letter-cover .panel{ animation: none !important; transition: none !important; }
 }
