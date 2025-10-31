@@ -1,0 +1,224 @@
+/* ===========================================================
+   💌 Carta Animada — Tema Rosado / Negro / Dorado
+   =========================================================== */
+
+/* Reset general */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Paleta y variables */
+:root{
+  --pink: #F7C7D9;
+  --pink-soft: #FBE9F1;
+  --black: #1b1b1b;
+  --gold: #D4AF37;
+  --gold-light: rgba(212,175,55,.22);
+  --muted: rgba(0,0,0,.55);
+  --ring: rgba(0,0,0,.08);
+
+  /* patrón de puntitos */
+  --dot-size: 28px;     /* distancia entre puntos */
+  --dot-radius: 1.7px;  /* radio del punto */
+  --dot-opacity: .38;   /* opacidad global del patrón */
+}
+
+/* Tipografía base */
+html, body{
+  height: 100%;
+  font-family: "Poppins", system-ui, -apple-system, sans-serif;
+  color: var(--black);
+}
+
+/* ===========================================================
+   🎀 Fondo rosado con puntitos dorados
+   =========================================================== */
+
+/* Patrón fijo en <html> para que se vea en todos los bloques */
+html{
+  background:
+    radial-gradient(circle, rgba(212,175,55,1) 0 var(--dot-radius), transparent calc(var(--dot-radius) + .1px)) 0 0 / var(--dot-size) var(--dot-size),
+    radial-gradient(circle, rgba(212,175,55,1) 0 var(--dot-radius), transparent calc(var(--dot-radius) + .1px)) calc(var(--dot-size)/2) calc(var(--dot-size)/2) / var(--dot-size) var(--dot-size),
+    var(--pink-soft);
+  background-attachment: fixed, fixed, fixed;
+}
+html::before{
+  content:"";
+  position: fixed; inset: 0; pointer-events: none; z-index: -1;
+  background:
+    radial-gradient(circle, rgba(212,175,55,1) 0 var(--dot-radius), transparent calc(var(--dot-radius) + .1px)) 0 0 / var(--dot-size) var(--dot-size),
+    radial-gradient(circle, rgba(212,175,55,1) 0 var(--dot-radius), transparent calc(var(--dot-radius) + .1px)) calc(var(--dot-size)/2) calc(var(--dot-size)/2) / var(--dot-size) var(--dot-size);
+  opacity: var(--dot-opacity);
+}
+
+/* Viñeta leve para darle profundidad */
+html::after{
+  content:"";
+  position: fixed; inset: 0; pointer-events: none; z-index: -1;
+  background:
+    radial-gradient(120% 60% at 50% -10%, rgba(255,255,255,.10), transparent 60%),
+    radial-gradient(120% 60% at 50% 110%, rgba(255,255,255,.08), transparent 60%);
+}
+
+/* Fondo transparente en todo lo demás */
+body,
+.wrap,
+main,
+header.site,
+section.block { background: transparent !important; }
+
+/* ===========================================================
+   ✉️ Animación de la carta
+   =========================================================== */
+.letter-cover{
+  position: fixed; inset: 0; z-index: 60;
+  cursor: pointer;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* Flaps triangulares */
+.letter-cover .panel{
+  position: absolute; left: 0; width: 100%; height: 50vh;
+  will-change: clip-path, filter;
+  background:
+    repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 6px, transparent 6px 12px),
+    linear-gradient(#ffdfee, var(--pink));
+  filter:
+    drop-shadow(0 0 0.6px rgba(0,0,0,.8))
+    drop-shadow(0 6px 18px rgba(0,0,0,.08));
+}
+.letter-cover .panel.top{
+  top: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.letter-cover .panel.bottom{
+  bottom: 0;
+  clip-path: polygon(0 100%, 100% 100%, 50% 0);
+}
+
+/* Círculo y línea central */
+.center-mark{
+  position: fixed; left: 0; right: 0; top: 50%;
+  transform: translateY(-50%);
+  display: grid; place-items: center;
+  pointer-events: none;
+  transition: opacity .35s ease, transform .35s ease;
+}
+.center-mark .seam{
+  width: min(92vw, 900px); height: 2px;
+  background: linear-gradient(to right, transparent, rgba(0,0,0,.28), transparent);
+  opacity: .35;
+}
+.center-mark::before{
+  content:"";
+  position: absolute; width: 64px; height: 64px; border-radius: 50%;
+  border: 2px dashed rgba(0,0,0,.55);
+  background:
+    radial-gradient(circle at 32% 32%, rgba(0,0,0,.08), transparent 60%),
+    linear-gradient(#fff6fa, #f7ddeb);
+  box-shadow: 0 6px 16px rgba(0,0,0,.1), inset 0 0 0 3px var(--gold-light);
+  transform: translateY(-60px);
+}
+.center-mark .hint{
+  margin-top: 10px;
+  font-size: 14px; color: var(--muted);
+  background: rgba(255,255,255,.85);
+  padding: 4px 10px; border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.08);
+  backdrop-filter: blur(3px);
+}
+
+/* Animación tipo "abrir" */
+@keyframes flapTop {
+  0%   { clip-path: polygon(0 0, 100% 0, 50% 100%); }
+  18%  { clip-path: polygon(5% 0, 95% 0, 50% 92%); }
+  100% { clip-path: polygon(-5% -140%, 105% -140%, 50% 0); }
+}
+@keyframes flapBottom {
+  0%   { clip-path: polygon(0 100%, 100% 100%, 50% 0); }
+  18%  { clip-path: polygon(5% 100%, 95% 100%, 50% 8%); }
+  100% { clip-path: polygon(-5% 240%, 105% 240%, 50% 100%); }
+}
+.letter-cover.open .panel.top{ animation: flapTop 760ms cubic-bezier(.2,.8,.2,1) forwards; }
+.letter-cover.open .panel.bottom{ animation: flapBottom 760ms cubic-bezier(.2,.8,.2,1) forwards; }
+.letter-cover.open .center-mark{ opacity: 0; transform: translateY(-50%) scale(.98); }
+
+/* ===========================================================
+   🌸 Contenido — Texto flotante y limpio
+   =========================================================== */
+.wrap{
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .45s ease .05s, transform .45s ease .05s;
+}
+.wrap.ready{ opacity: 1; transform: none; }
+
+header.site{
+  position: sticky; top: 0; z-index: 10;
+  backdrop-filter: saturate(120%) blur(6px);
+  background: rgba(255,248,252,.7);
+  border-bottom: 1px solid var(--ring);
+}
+.brand.max{
+  max-width: 920px; margin: 0 auto; padding: 14px 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.dot{ width: 10px; height: 10px; border-radius: 50%; background: var(--gold); }
+.brand h1{ font-size: 16px; letter-spacing: .5px; text-transform: uppercase; }
+
+main{ scroll-snap-type: y mandatory; }
+section.block{
+  min-height: 80svh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  scroll-snap-align: start; padding: 0 24px; text-align: center;
+}
+
+.card{
+  background: transparent; border: none; box-shadow: none;
+  color: var(--black); max-width: 700px; margin: 0 auto;
+}
+.eyebrow{
+  font-size: 12px; letter-spacing: .25em;
+  color: rgba(0,0,0,.45); margin-bottom: 10px;
+}
+.num{
+  display: block; font-size: clamp(40px, 10vw, 90px); font-weight: 800;
+  color: transparent; -webkit-text-stroke: 1.5px var(--black);
+  text-shadow: 0 1px 0 #fff, 0 0 1px var(--gold);
+  margin-bottom: 8px;
+}
+h2{
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 600; color: var(--black); margin-bottom: 14px;
+}
+p{
+  font-size: clamp(17px, 3vw, 20px);
+  line-height: 1.6; color: rgba(0,0,0,.85);
+}
+
+/* Imagen opcional (por ejemplo, después del agradecimiento) */
+.floating-image{
+  display: block; width: min(80%, 420px); margin: 40px auto 0;
+  border-radius: 10px; object-fit: cover;
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.wrap.ready .floating-image{ opacity: 1; transform: none; }
+
+
+
+/* Footer */
+.footer{ padding: 36px 18px; text-align: center; color: rgba(0,0,0,.5); }
+.top{
+  background: transparent; border: 2px solid var(--gold); color: var(--black);
+  padding: 8px 14px; border-radius: 999px; cursor: pointer;
+  transition: all .3s ease;
+}
+.top:hover{ background: var(--gold); color: #fff; }
+
+/* Accesibilidad */
+.no-scroll{ overflow: hidden; }
+:focus-visible{ outline: 2px dashed var(--gold); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce){
+  .letter-cover .panel{ animation: none !important; transition: none !important; }
+}

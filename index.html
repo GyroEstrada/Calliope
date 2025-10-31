@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Carta de Cumpleaños</title>
+  <meta name="description" content="Carta de cumpleaños con apertura de carta a pantalla completa: saludo, agradecimiento y felicitaciones." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Overlay: carta a pantalla completa que se abre arriba/abajo -->
+  <div id="letterCover" class="letter-cover" role="button" tabindex="0" aria-label="Abrir carta">
+    <div class="panel top"></div>
+    <div class="panel bottom"></div>
+    <div class="center-mark">
+      <div class="seam"></div>
+      <span class="hint">Toca o presiona Enter para abrir</span>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div id="contenido" class="wrap" aria-live="polite">
+    <header class="site">
+      <div class="brand max">
+        <div class="dot" aria-hidden="true"></div>
+        <h1>Carta de cumpleaños</h1>
+      </div>
+    </header>
+
+    <main>
+      <!-- 01 — Saludo -->
+      <section class="block" id="p1">
+        <div class="max">
+          <div class="card">
+            <div class="eyebrow">01 — Saludo</div>
+            <h2 id="saludoTitulo">¡Feliz cumpleaños Cara!</h2>
+            <p id="saludoTexto">
+              Hoy es un gran día, celebramos tu llegada a los 20 (Cada día más vieja), comienza tu adultez, pero esto solo es un paso, esto no cambiará tu forma de ser, tu determinación 
+              por cumplir tus metas, tu gran sentido de la moda, tu humor. Despite everything. It's still you.
+            </p>
+          </div>
+        </div>
+        <img src="img/Vestido.jpg" alt="Flor beige de fondo" class="floating-image">
+      </section>
+
+      <!-- 02 — Agradecimiento -->
+      <section class="block" id="p2">
+        <div class="max">
+          <div class="card">
+            <div class="eyebrow">02 — Agradecimiento</div>
+            <h2 id="agradecimientoTitulo">Gracias por tanto</h2>
+            <p id="agradecimientoTexto">
+              Gracias por tu paciencia, tu risa, tu apoyo en los días difíciles y tu compañía. El hecho que estes presente trae una gran felicidad a mi vida. Gracias por todos los 
+              momentos que hemos compartidos, las llamadas riéndonos, estudiando, trabajando, cada pequeño momento ha significado mucho para mi, gracias 💙.
+              Sei diventata parte della mia routine, e non riesco a immaginare un giorno senza di te.
+              Ogni giorno scopro qualcosa di nuovo su di te: il tuo modo di pensare, ciò che ti piace, ciò che non ti piace, la tua voce perfetta, i tuoi bellissimi occhi.
+              Grazie di cuore... e scusami se posso darti così poco.
+            </p>
+          </div>
+        </div>
+        <img src="img/Sunset.jpg" alt="Flor beige de fondo" class="floating-image">
+      </section>
+
+      <!-- 03 — Felicitaciones -->
+      <section class="block" id="p3">
+        <div class="max">
+          <div class="card">
+            <div class="eyebrow">03 — Felicitaciones</div>
+            <h2 id="felicitacionesTitulo">Brindo por lo que viene</h2>
+            <p id="felicitacionesTexto">
+              Que comiences tus 20 llenos de éxitos, comiences tu sueño de comenzar a trabajar en lo que te gusta, sigas compartiendo con tu familia, amigos y conmigo. Espero 
+              sigamos compartiendo tiempo juntos, tener una conexión profunda y significante, sigamos compartiendo música, comida, ideas, nosotros, que esto sea el inicio de 
+              una gran historia.
+            </p>
+          </div>
+        </div>
+        <img src="img/Outfit.jpg" alt="Flor beige de fondo" class="floating-image">
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        Te quiero - Ti voglio bene - che in qastzij katwaj - I love you
+      </p>
+    </footer>
+  </div>
+
+  <noscript>Activa JavaScript para ver la animación de apertura.</noscript>
+  <script src="script.js"></script>
+</body>
+</html>
